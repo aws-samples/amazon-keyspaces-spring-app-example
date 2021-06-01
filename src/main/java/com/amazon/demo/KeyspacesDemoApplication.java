@@ -11,7 +11,6 @@ import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.core.EntityWriteResult;
 import org.springframework.data.cassandra.core.InsertOptions;
 import org.springframework.data.cassandra.core.query.Query;
-import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -20,7 +19,6 @@ import java.util.UUID;
 import static org.springframework.data.cassandra.core.query.Criteria.where;
 
 @SpringBootApplication
-@Component
 public class KeyspacesDemoApplication {
 
 	/*
