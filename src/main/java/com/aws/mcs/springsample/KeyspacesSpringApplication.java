@@ -1,4 +1,4 @@
-package com.amazon.demo;
+package com.aws.mcs.springsample;
 
 import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
@@ -19,28 +19,17 @@ import java.util.UUID;
 import static org.springframework.data.cassandra.core.query.Criteria.where;
 
 @SpringBootApplication
-public class KeyspacesDemoApplication {
+public class KeyspacesSpringApplication {
 
-	/*
-	CREATE TABLE "keyspace_name"."company"(
-	"companyid" text,
-	"companyname" text,
-	"duns" text,
-	PRIMARY KEY("companyid"))
-WITH CUSTOM_PROPERTIES = {
-	'capacity_mode':{'throughput_mode':'PAY_PER_REQUEST'},
-	'point_in_time_recovery':{'status':'enabled'}}
-	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(KeyspacesSpringApplication.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KeyspacesDemoApplication.class);
-
-	private static Company addCompany(String companyName, String duns) {
-		return new Company(UUID.randomUUID().toString(), companyName, duns);
+	private static Company addCompany(String companyName, String uniqueBusinessIdentifier) {
+		return new Company(UUID.randomUUID().toString(), companyName, uniqueBusinessIdentifier);
 	}
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 
-		SpringApplication.run(KeyspacesDemoApplication.class, args);
+		SpringApplication.run(KeyspacesSpringApplication.class, args);
 		// use Java-based bean metadata to register an instance of a com.datastax.oss.driver.api.core.CqlSession
 		CqlSession cqlSession = new AppConfig().session();
 
@@ -57,10 +46,12 @@ WITH CUSTOM_PROPERTIES = {
 		EntityWriteResult<Company> company = template.insert(addCompany("Amazon Inc.", "15-048-3782"), insertOptions);
 		// Let's select tne newly inserted company from the Amazon Keyspaces table
 		// Place your companyId into the query
-		// SELECT * FROM keyspace_name.company WHERE companyid = "44cdb6ae-2bd4-4008-a0b2-60f6b8972f20"
-		Company result = template.selectOne(
-				Query.query(where("companyId").is("44cdb6ae-2bd4-4008-a0b2-60f6b8972f20")), Company.class);
-		LOGGER.info(result.toString());
+		// Select the first record from the table with no where clause
+		Company resultOne = template.selectOne(Query.empty().limit(1), Company.class);
+		// Select the second record based on the previous query with where clause
+		Company resultSecond = template.selectOne(
+				Query.query(where("companyId").is(resultOne.getCompanyId())), Company.class);
+		LOGGER.info(resultSecond.toString());
 
 		cqlSession.close();
 		System.exit(0);

@@ -1,4 +1,4 @@
-package com.amazon.demo;
+package com.aws.mcs.springsample;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -9,13 +9,13 @@ public class Company {
     @PrimaryKey private final String companyId;
 
     private final String companyName;
-    private final String duns;
+    private final String uniqueBusinessIdentifier;
 
 
-    public Company(String companyId, String companyName, String duns) {
+    public Company(String companyId, String companyName, String uniqueBusinessIdentifier) {
         this.companyId = companyId;
         this.companyName = companyName;
-        this.duns = duns;
+        this.uniqueBusinessIdentifier = uniqueBusinessIdentifier;
     }
 
     public String getCompanyId() {
@@ -26,8 +26,8 @@ public class Company {
         return companyName;
     }
 
-    public String getDuns() {
-        return duns;
+    public String getUniqueBusinessIdentifier() {
+        return uniqueBusinessIdentifier;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Company {
         return "Company{" +
                 "companyId='" + companyId + '\'' +
                 ", companyName='" + companyName + '\'' +
-                ", duns='" + duns + '\'' +
+                ", business identifier='" + uniqueBusinessIdentifier + '\'' +
                 '}';
     }
 }
