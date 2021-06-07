@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
 package com.aws.mcs.springsample;
 
 import com.datastax.oss.driver.api.core.ConsistencyLevel;

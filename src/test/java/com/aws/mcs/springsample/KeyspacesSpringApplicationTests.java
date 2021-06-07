@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
 package com.aws.mcs.springsample;
 
 import com.datastax.oss.driver.api.core.CqlSession;
@@ -9,22 +12,26 @@ import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.*;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 
 @SpringBootTest
 public class KeyspacesSpringApplicationTests {
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyspacesSpringApplicationTests.class);
+
+    @Autowired
+    private CqlSession cqlSession;
         @Test
         void contextLoads() throws InterruptedException {
-            try {
 
                 UUID uuid = UUID.randomUUID();
 
-                CqlSession cqlSession = new AppConfig().session();
                 SimpleStatement stmtCreateKeyspaces = SchemaBuilder.createKeyspace("keyspace_name").ifNotExists()
                         .withSimpleStrategy(1)
                         .build();
@@ -52,10 +59,8 @@ public class KeyspacesSpringApplicationTests {
                 cqlSession.execute(stmtInsert);
                 Row row = cqlSession.execute(stmtQuery).one();
                 assert "00-00-0000".equals(row.getString(0));
-
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
+                LOGGER.info("Returned value:" + row.getString(0));
+                LOGGER.info("CompanyId:" + uuid);
 
         }
     }
