@@ -94,5 +94,5 @@ Enjoy! Feedback and PR's welcome!
 
 ### License
 
-This library is licensed under the MIT-0 License. See the LICENSE file.
+This sample is licensed under the Apache-2 License. See the LICENSE file.
   
