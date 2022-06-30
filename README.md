@@ -22,6 +22,7 @@ Provide the path to the trustStore file and the password that you created previo
         class = DefaultSslEngineFactory
         truststore-path = "./src/main/resources/cassandra_truststore.jks"
         truststore-password = "my_trustStore_password"
+        hostname-validation = false
       }
     ...
 ```
